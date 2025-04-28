@@ -67,12 +67,21 @@ def main():
             break
         print("⚠️ Commit message cannot be empty. Please enter a message.")
 
-    if not run_cmd(f'git commit -m "{commit_msg}"', capture_output=True, check_success=True):
-        print("❌ Error committing.")
-        sys.exit(1)
+    # Try to commit
+    commit_result = subprocess.run(f'git commit -m "{commit_msg}"', shell=True, text=True, capture_output=True)
 
-    print("\n📜 Here's the commit you just made:\n")
-    run_cmd("git log -1 --stat")
+    # Analyze commit output
+    if commit_result.returncode != 0:
+        output = (commit_result.stdout + commit_result.stderr).lower()
+        if "nothing to commit" in output or "working tree clean" in output:
+            print("\n⚠️ Nothing to commit. Working tree is already clean.")
+            print("✅ No action needed.\n")
+        else:
+            print("❌ Error committing.")
+            sys.exit(1)
+    else:
+        print("\n✅ Commit successful!\n")
+        print(commit_result.stdout.strip())
 
     confirm_push = input("\n🚀 Ready to push to GitHub? (y/n): ").strip().lower()
     if confirm_push != 'y':
