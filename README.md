@@ -18,7 +18,7 @@ chmod +x ~/.bin/githelper
 1.  Create a small wrapper so you can run githelper from anywhere:
 
 ```bash
-nano ~/.bin/githelper
+nano ~/.bin/githelper-cli
 ```
 
 2.  Paste this inside:
