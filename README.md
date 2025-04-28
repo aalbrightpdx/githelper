@@ -31,7 +31,7 @@ python3 ~/.bin/githelper/githelper.py
 3.  ✅ Save and exit (CTRL+O, Enter, CTRL+X), make it executable:
 
 ```bash
-chmod +x ~/.bin/githelper
+chmod +x ~/.bin/githelper-cli
 ```
 
 ---
@@ -59,7 +59,7 @@ If you want to run `githelper` from anywhere:
 ## ⚡ Usage
 
 ```bash
-githelper
+githelper-cli
 ```
 
 It will:
