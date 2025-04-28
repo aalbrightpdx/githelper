@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import subprocess
 import sys
 
@@ -23,10 +22,29 @@ def in_git_repo():
     return subprocess.run("git rev-parse --is-inside-work-tree", shell=True,
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
 
+def get_remote_url():
+    """Get the remote origin URL."""
+    result = subprocess.run("git remote get-url origin", shell=True, text=True, capture_output=True)
+    if result.returncode == 0:
+        return result.stdout.strip()
+    return None
+
 def main():
     if not in_git_repo():
         print("❌ Not inside a git repository. Please 'cd' into one first.")
         sys.exit(1)
+
+    remote_url = get_remote_url()
+    if not remote_url:
+        print("❌ No remote origin URL found. Please set a remote first.")
+        sys.exit(1)
+
+    print(f"\n📦 Remote repository detected: {remote_url}")
+
+    confirm_repo = input("\n✅ Is this the correct repository you want to update? (y/n): ").strip().lower()
+    if confirm_repo != 'y':
+        print("❌ Aborted to prevent mistakes.")
+        sys.exit(0)
 
     print("\n🔍 Checking git status...\n")
     if not run_cmd("git status", capture_output=True, check_success=True):
@@ -49,7 +67,6 @@ def main():
             break
         print("⚠️ Commit message cannot be empty. Please enter a message.")
 
-    # Safer commit using quotes
     if not run_cmd(f'git commit -m "{commit_msg}"', capture_output=True, check_success=True):
         print("❌ Error committing.")
         sys.exit(1)
