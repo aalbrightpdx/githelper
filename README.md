@@ -1,6 +1,8 @@
 # GitHelper
 
-![githelper banner](assets/githelper.png)
+<p align="center">
+  <img src="assets/githelper.png" alt="githelper banner" width="50%">
+</p>
 
 🛠️ A smart, friendly CLI assistant for safely staging, committing, and pushing Git changes — with built-in teaching moments and power-user flags.
 
