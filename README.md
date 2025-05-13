@@ -85,3 +85,11 @@ Uninstall
 pip uninstall githelper
 ```
 
+## 💡 Requirements
+
+- Python 3.6+
+- Git installed and available in your system PATH
+
+## 📜 License
+
+MIT — free to use, modify, and share.
