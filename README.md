@@ -1,4 +1,4 @@
-# githelper
+# GitHelper
 
 ```text
  _____ _ _   _   _      _                 

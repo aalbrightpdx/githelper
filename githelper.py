@@ -10,13 +10,14 @@ args = sys.argv[1:]
 FLAG_NO_EXPLAIN = "--no-explain" in args
 FLAG_YES = "--yes" in args
 FLAG_HELP = "--help" in args or "-h" in args
+FLAG_PREVIEW = "--preview" in args  # NEW
 
 # ─────────────────────────────────────────────
-# Optional Banner Display (coming soon ✨)
+# Optional Banner Display
 # ─────────────────────────────────────────────
 def print_banner():
     banner = (
-        "\033[1;36m" +  # Bright magenta (classic LORD feel)
+        "\033[1;36m" +
         " _____ _ _   _   _      _                 \n"
         "|  __ (_) | | | | |    | |                \n"
         "| |  \\/_| |_| |_| | ___| |_ __   ___ _ __ \n"
@@ -25,10 +26,13 @@ def print_banner():
         " \\____/_|\\__\\_| |_|\\___|_| .__/ \\___|_|   \n"
         "                         | |              \n"
         "                         |_|              \n"
-        "\033[0m"  # Reset formatting
+        "\033[0m"
     )
     print(banner)
 
+# ─────────────────────────────────────────────
+# Help Output
+# ─────────────────────────────────────────────
 def show_help():
     print("""
 Usage: githelper [options]
@@ -36,24 +40,21 @@ Usage: githelper [options]
 Options:
   --yes         Automatically confirm all prompts
   --no-explain  Suppress helpful Git explanations
+  --preview     Ask to preview the commit diff before committing
   --help, -h    Show this help message
 
 Description:
   githelper is a friendly Git push assistant that:
     - Confirms your remote repo
-    - Checks for untracked files and modified files
-    - Offers to stage everything
+    - Checks for untracked or modified files
+    - Offers to stage, commit, and push
     - Detects detached HEAD state and explains it
-    - Offers diff preview before commit
-    - Stages, commits, and pushes your changes
+    - Warns on merge conflicts
 """)
     sys.exit(0)
 
-if FLAG_HELP:
-    show_help()
-
 # ─────────────────────────────────────────────
-# Utilities
+# Utility Functions
 # ─────────────────────────────────────────────
 def run_cmd(cmd, capture_output=True, check_success=False):
     result = subprocess.run(cmd, shell=True, text=True, capture_output=capture_output)
@@ -86,11 +87,14 @@ def has_merge_conflict():
     return bool(result.stdout.strip())
 
 # ─────────────────────────────────────────────
-# Main Flow
+# Main Logic
 # ─────────────────────────────────────────────
 def main():
+    if FLAG_HELP:
+        show_help()
+
     print_banner()
-    
+
     if not in_git_repo():
         print("❌ Not inside a git repository. Please 'cd' into one first.")
         sys.exit(1)
@@ -107,25 +111,25 @@ def main():
             print("❌ Aborted to prevent mistakes.")
             sys.exit(0)
 
-    # Detect detached HEAD
+    # Detached HEAD warning
     if is_detached_head():
         print("⚠️  Detached HEAD state detected!")
         if not FLAG_NO_EXPLAIN:
             print("""
 📘 Detached HEAD means:
-    - You’re on a specific commit, not a branch
-    - Commits made now could be lost if you switch away
-💡 Create a branch to save changes:
-    git checkout -b my-branch
+    - You're on a specific commit, not a branch.
+    - Commits made now could be lost.
+💡 Create a branch to save your work:
+    git checkout -b my-fix-branch
 """)
 
-    # Detect merge conflicts
+    # Conflict check
     if has_merge_conflict():
         print("❌ Merge conflict detected! Resolve it before continuing.")
         print("💡 Use `git status` and `git mergetool` to resolve conflicts.")
         sys.exit(1)
 
-    # Get status
+    # Git status check
     print("\n🔍 Checking git status...\n")
     status_raw = subprocess.run("git status --short", shell=True, capture_output=True, text=True)
     status_output = status_raw.stdout.strip()
@@ -136,10 +140,10 @@ def main():
     else:
         print(status_output)
 
-    # Detect untracked files
+    # Handle untracked files
     untracked_detected = any(line.startswith("??") for line in status_output.splitlines())
     if untracked_detected:
-        print("\n⚠️ You have untracked files! These won't be included unless you add them.")
+        print("\n⚠️ You have untracked files.")
         if FLAG_YES or input("→ Add all untracked files now? [y/n]: ").strip().lower() == 'y':
             if not run_cmd("git add .", capture_output=False, check_success=True):
                 print("❌ git add failed.")
@@ -148,7 +152,7 @@ def main():
         else:
             print("🛑 Leaving untracked files untouched.")
             if not FLAG_YES:
-                proceed = input("\nContinue without adding untracked files? [y/n]: ").strip().lower()
+                proceed = input("Continue without them? [y/n]: ").strip().lower()
                 if proceed != 'y':
                     print("❌ Aborted.")
                     sys.exit(0)
@@ -161,18 +165,19 @@ def main():
             print("❌ Aborted.")
             sys.exit(0)
 
-    # Confirm staged changes
+    # Confirm staging
     staged_check = subprocess.run("git diff --cached --quiet", shell=True)
     if staged_check.returncode == 0:
         print("⚠️ No changes staged. Nothing to commit.")
         sys.exit(0)
 
-    if not FLAG_NO_EXPLAIN:
+    # Diff preview (only if --preview passed)
+    if FLAG_PREVIEW:
         if FLAG_YES or input("\n👀 Would you like to preview what will be committed? [y/n]: ").strip().lower() == 'y':
-            print("\n📋 Staged diff:")
+            print("\n📋 Staged diff:\n")
             run_cmd("git diff --cached", capture_output=True)
 
-    # Commit message
+    # Commit
     if FLAG_YES:
         commit_msg = "Update files"
     else:
@@ -182,7 +187,6 @@ def main():
                 break
             print("⚠️ Commit message cannot be empty.")
 
-    # Commit
     commit_result = subprocess.run(f'git commit -m "{commit_msg}"', shell=True, text=True, capture_output=True)
     if commit_result.returncode != 0:
         output = (commit_result.stdout + commit_result.stderr).strip().lower()
@@ -201,7 +205,7 @@ def main():
     if FLAG_YES or input("\n🚀 Ready to push to GitHub? [y/n]: ").strip().lower() == 'y':
         if not run_cmd("git push", capture_output=True, check_success=True):
             print("❌ Error pushing to GitHub.")
-            print("💡 Tip: You may need to run `git pull --rebase origin main` or `git push --force`.")
+            print("💡 Tip: Try `git pull --rebase` or `git push --force` if needed.")
             sys.exit(1)
         print("\n🎉✅ All done! Your changes are pushed!")
     else:
