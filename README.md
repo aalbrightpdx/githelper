@@ -18,25 +18,6 @@
 
 ---
 
-## 🧰 Setup Instructions
-
-To use `githelper` as a system-wide command, follow these steps:
-
-### 1. Make sure you have the following files:
-
-- `githelper.py` → the actual script
-- `setup.py` → a small installer script
-
-### 2. Install `githelper` locally (editable mode)
-
-Run this in the same directory where `setup.py` and `githelper.py` are located:
-
-```bash
-pipx install -e .
-```
-
-This tells Python to install githelper as a system-wide command in “editable” mode — meaning any changes you make to githelper.py will take effect immediately.
-
 ## 🧰 Clone the GitHelper repository to your system:
 
 Open your terminal and run:
@@ -54,7 +35,24 @@ git clone https://github.com/aalbrightpdx/githelper.git
 ```bash
 cd githelper
 
-pip install -e .
+pip install .
+```
+
+## 🧰 Install
+
+To use `githelper` as a system-wide command, follow these steps:
+
+### 1. Make sure you have the following files:
+
+- `githelper.py` → the actual script
+- `setup.py` → a small pipx installer script
+
+### 2. Install `githelper` locally
+
+Run this in the same directory where `setup.py` and `githelper.py` are located:
+
+```bash
+pipx install -e .
 ```
 
 ## 🚀 Usage
