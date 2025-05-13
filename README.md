@@ -34,30 +34,19 @@ git clone https://github.com/aalbrightpdx/githelper.git
 
 ```bash
 cd githelper
-
-pip install .
 ```
 
 ## 🧰 Install
 
-To use `githelper` as a system-wide command, follow these steps:
-
-### 1. Make sure you have the following files:
-
-- `githelper.py` → the actual script
-- `setup.py` → a small pipx installer script
-
-### 2. Install `githelper` locally
-
-Run this in the same directory where `setup.py` and `githelper.py` are located:
+In the project directory:
 
 ```bash
-pipx install -e .
+pipx install .
 ```
 
 ## 🚀 Usage
 
-Once installed, run:
+Once installed, from any directory run:
 
 ```bash
 githelper              # Start interactive assistant
