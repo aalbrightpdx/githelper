@@ -1,15 +1,7 @@
 # GitHelper
 
-```text
- _____ _ _   _   _      _                 
-|  __ (_) | | | | |    | |                
-| |  \/_| |_| |_| | ___| |_ __   ___ _ __ 
-| | __| | __|  _  |/ _ \ | '_ \ / _ \ '__|
-| |_\ \ | |_| | | |  __/ | |_) |  __/ |   
- \____/_|\__\_| |_/\___|_| .__/ \___|_|   
-                         | |              
-                         |_|             
-```
+![githelper banner](assets/githelper.png)
+
 🛠️ A smart, friendly CLI assistant for safely staging, committing, and pushing Git changes — with built-in teaching moments and power-user flags.
 
 ---
