@@ -1,80 +1,95 @@
-# 🛠️ GitHelper
+# githelper
 
-A tiny Python tool that makes Git commits and pushes much easier!
+ _____ _ _   _   _      _                 
+|  __ (_) | | | | |    | |                
+| |  \/_| |_| |_| | ___| |_ __   ___ _ __ 
+| | __| | __|  _  |/ _ \ | '_ \ / _ \ '__|
+| |_\ \ | |_| | | |  __/ | |_) |  __/ |   
+ \____/_|\__\_| |_/\___|_| .__/ \___|_|   
+                         | |              
+                         |_|         
 
----
-
-## 🚀 Install
-
-1.  Clone the repository:
-
-```bash
-git clone git@github.com:aalbrightpdx/githelper.git ~/.bin/githelper
-chmod +x ~/.bin/githelper
-```
-
-## Create a Global Launcher Script
-
-1.  Create a small wrapper so you can run githelper from anywhere:
-
-```bash
-nano ~/.bin/githelper-cli
-```
-
-2.  Paste this inside:
-
-```bash
-#!/bin/bash
-python3 ~/.bin/githelper/githelper.py
-```
-
-3.  ✅ Save and exit (CTRL+O, Enter, CTRL+X), make it executable:
-
-```bash
-chmod +x ~/.bin/githelper-cli
-```
+🛠️ A smart, friendly CLI assistant for safely staging, committing, and pushing Git changes — with built-in teaching moments and power-user flags.
 
 ---
 
-## ➕ Add to PATH
+## ✨ What It Does
 
-If you want to run `githelper` from anywhere:
-
-1. Add the PATH="$HOME/.bin:$PATH"' to ~/.bashrc:
-
-    ```bash
-    echo 'export PATH="$HOME/.bin:$PATH"' >> ~/.bashrc
-    ```
-
-3. Reload your shell:
-
-    ```bash
-    source ~/.bashrc
-    ```
-
-✅ Now you can just type `githelper` from any Git project!
+- Detects and stages untracked or modified files
+- Prompts before committing and pushing
+- Explains detached HEAD state when detected
+- Prevents commits during merge conflicts
+- Shows diff preview before commit (optional)
+- Flags to suppress prompts and explanations
 
 ---
 
-## ⚡ Usage
+## 🧰 Setup Instructions
+
+To use `githelper` as a system-wide command, follow these steps:
+
+### 1. Make sure you have the following files:
+
+- `githelper.py` → the actual script
+- `setup.py` → a small installer script
+
+### 2. Install `githelper` locally (editable mode)
+
+Run this in the same directory where `setup.py` and `githelper.py` are located:
 
 ```bash
-githelper-cli
+pip install -e .
 ```
 
-It will:
+This tells Python to install githelper as a system-wide command in “editable” mode — meaning any changes you make to githelper.py will take effect immediately.
 
-- Show the current Git status
-- Confirm before adding and committing
-- Prompt you for a commit message
-- Confirm again before pushing to GitHub
+## 🧰 Clone the GitHelper repository to your system:
 
-Safe, fast, and friendly.
+Open your terminal and run:
 
----
+```bash
+git clone git@github.com:aalbrightpdx/githelper.git
+```
 
-## 📝 License
+Or, if you prefer HTTPS:
 
-MIT License.  
-See `LICENSE` for full details.
+```bash
+git clone https://github.com/aalbrightpdx/githelper.git
+```
+
+```bash
+cd githelper
+
+pip install -e .
+```
+
+
+
+## 🚀 Usage
+
+Once installed, run:
+
+```bash
+githelper              # Start interactive assistant
+githelper --yes        # Auto-confirm everything
+githelper --no-explain # Skip explanations
+githelper -h           # Show help
+```
+
+Example workflow:
+
+```bash
+📦 Remote repository detected: git@github.com:your/repo.git
+✅ Is this the correct repository you want to update? [y/n]: y
+🔍 Checking git status...
+✅ Stage all changes and continue? [y/n]: y
+📝 Enter your commit message: Add CLI help flags
+🚀 Ready to push to GitHub? [y/n]: y
+🎉✅ All done! Your changes are pushed!
+```
+
+Uninstall
+```bash
+pip uninstall githelper
+```
 

@@ -11,6 +11,24 @@ FLAG_NO_EXPLAIN = "--no-explain" in args
 FLAG_YES = "--yes" in args
 FLAG_HELP = "--help" in args or "-h" in args
 
+# ─────────────────────────────────────────────
+# Optional Banner Display (coming soon ✨)
+# ─────────────────────────────────────────────
+def print_banner():
+    banner = (
+        "\033[1;36m" +  # Bright magenta (classic LORD feel)
+        " _____ _ _   _   _      _                 \n"
+        "|  __ (_) | | | | |    | |                \n"
+        "| |  \\/_| |_| |_| | ___| |_ __   ___ _ __ \n"
+        "| | __| | __|  _  |/ _ \\ | '_ \\ / _ \\ '__|\n"
+        "| |_\\ \\ | |_| | | |  __/ | |_) |  __/ |   \n"
+        " \\____/_|\\__\\_| |_|\\___|_| .__/ \\___|_|   \n"
+        "                         | |              \n"
+        "                         |_|              \n"
+        "\033[0m"  # Reset formatting
+    )
+    print(banner)
+
 def show_help():
     print("""
 Usage: githelper [options]
@@ -71,6 +89,8 @@ def has_merge_conflict():
 # Main Flow
 # ─────────────────────────────────────────────
 def main():
+    print_banner()
+    
     if not in_git_repo():
         print("❌ Not inside a git repository. Please 'cd' into one first.")
         sys.exit(1)

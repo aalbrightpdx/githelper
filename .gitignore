@@ -1,0 +1,18 @@
+# Bytecode / cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+env/
+
+# Editor folders
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+
+# Logs
+*.log
+
