@@ -32,7 +32,7 @@ To use `githelper` as a system-wide command, follow these steps:
 Run this in the same directory where `setup.py` and `githelper.py` are located:
 
 ```bash
-pip install -e .
+pipx install -e .
 ```
 
 This tells Python to install githelper as a system-wide command in “editable” mode — meaning any changes you make to githelper.py will take effect immediately.
@@ -56,8 +56,6 @@ cd githelper
 
 pip install -e .
 ```
-
-
 
 ## 🚀 Usage
 
