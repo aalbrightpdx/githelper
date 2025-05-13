@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from setuptools import setup
 
 setup(
@@ -11,7 +9,7 @@ setup(
             "githelper = githelper:main",
         ],
     },
-    author="Aaron (with Rue 💖)",
+    author="aalbrightpdx",
     description="Friendly Git assistant for staging, committing, and pushing safely.",
     classifiers=[
         "Programming Language :: Python :: 3",
